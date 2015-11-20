@@ -1,0 +1,43 @@
+* {
+	font-family: opensans;
+	font-size: 10pt;
+}
+
+h1 {
+	color: rgb(0, 97, 73);
+	font-family: opensansbold;
+	font-size: 16pt;
+}
+
+span.big {
+	font-size: 20pt;
+}
+span.small {
+	font-family: opensanslight;
+	font-size: 20pt;
+}
+
+h1#subheadline {
+	font-family: opensanslight;
+}
+
+h2 {
+	color: rgb(0, 97, 73);
+	font-family: opensansbold;
+	font-size: 11pt;
+}
+
+a {
+	color: rgb(81, 184, 72);
+	font-weight: bold;
+}
+
+td.fieldname {
+	font-weight: bold;
+}
+
+.textfield {
+	background-color: white;
+	height: 1cm;
+	width: 100%;
+}

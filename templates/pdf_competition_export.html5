@@ -1,0 +1,16 @@
+<table width="100%">
+	<?php foreach ($this->arrOutput as $arrOutput) : ?>
+		<?php if ($arrOutput['label'] != ''): ?>
+			<tr nobr="true">
+				<td>
+					<br><br><strong><?php echo $arrOutput['label'][0] ?></strong>
+					<br><?php echo $arrOutput['value'] ?: '-' ?>
+				</td>
+			</tr>
+		<?php else: ?>
+			<tr nobr="true">
+				<td><br><?php echo $arrOutput['value'] ?: '-' ?></td>
+			</tr>
+		<?php endif ?>
+	<?php endforeach ?>
+</table>
