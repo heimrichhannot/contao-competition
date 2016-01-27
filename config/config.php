@@ -32,8 +32,11 @@ array_insert(
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['frontendEditAddCreateBehavior']['checkForExistingReviews'] =
-	array('HeimrichHannot\Competition\Competition', 'checkForExistingReviews');
+if (in_array('frontendedit', \ModuleLoader::getActive()))
+{
+	$GLOBALS['TL_HOOKS']['frontendEditAddCreateBehavior']['checkForExistingReviews'] =
+			array('HeimrichHannot\Competition\Competition', 'checkForExistingReviews');
+}
 
 /**
  * Models
