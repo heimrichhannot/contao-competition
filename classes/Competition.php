@@ -2,6 +2,7 @@
 
 namespace HeimrichHannot\Competition;
 use HeimrichHannot\HastePlus\Arrays;
+use HeimrichHannot\StatusMessages\StatusMessage;
 
 /**
  * Contao Open Source CMS
@@ -98,8 +99,8 @@ class Competition
 
 		if (empty($arrAllowedSubmissions))
 		{
-			$objModule->Template->error = true;
-			$objModule->Template->errorMessage = $GLOBALS['TL_LANG']['frontendedit']['noAllowedSubmissionsLeft'];
+			if (in_array('status_messages', \ModuleLoader::getActive()))
+				StatusMessage::addError($GLOBALS['TL_LANG']['competition']['noAllowedSubmissionsLeft'], $objModule->id);
 
 			return false;
 		}
