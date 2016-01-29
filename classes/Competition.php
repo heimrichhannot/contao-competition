@@ -30,16 +30,20 @@ class Competition
 		switch ($intMode)
 		{
 			case static::MODE_REVIEW:
-				$objReviewArchive = ReviewArchiveModel::findByPk($intPid);
+				$strArchiveClass = 'HeimrichHannot\Competition\ReviewArchiveModel';
+				$strItemClass = 'HeimrichHannot\Competition\ReviewModel';
 				break;
 			default:
-				$objReviewArchive = SubmissionArchiveModel::findByPk($intPid);
+				$strArchiveClass = 'HeimrichHannot\Competition\SubmissionArchiveModel';
+				$strItemClass = 'HeimrichHannot\Competition\SubmissionModel';
 				break;
 		}
 
-		if ($objReviewArchive !== null)
+		$objArchive = $strArchiveClass::findByPk($intPid);
+
+		if ($objArchive !== null)
 		{
-			$arrAllowedGroups = deserialize($objReviewArchive->memberGroups, true);
+			$arrAllowedGroups = deserialize($objArchive->memberGroups, true);
 
 			if (($objMembers = \MemberModel::findAll()) !== null)
 			{
@@ -49,7 +53,9 @@ class Competition
 
 					// no memberGroups defined -> all members are allowed
 					if (empty($arrAllowedGroups) || array_intersect($arrAllowedGroups, $arrGroups))
+					{
 						$arrOptions[$objMembers->id] = $objMembers->firstname .  ' ' . $objMembers->lastname;
+					}
 				}
 			}
 		}
