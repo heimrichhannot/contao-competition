@@ -31,11 +31,9 @@ class Competition
 		{
 			case static::MODE_REVIEW:
 				$strArchiveClass = 'HeimrichHannot\Competition\ReviewArchiveModel';
-				$strItemClass = 'HeimrichHannot\Competition\ReviewModel';
 				break;
 			default:
 				$strArchiveClass = 'HeimrichHannot\Competition\SubmissionArchiveModel';
-				$strItemClass = 'HeimrichHannot\Competition\SubmissionModel';
 				break;
 		}
 
