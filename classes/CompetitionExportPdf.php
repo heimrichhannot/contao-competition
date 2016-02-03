@@ -3,7 +3,7 @@
 namespace HeimrichHannot\Competition;
 
 use Contao\MemberModel;
-use HeimrichHannot\FormHybrid\FormHelper;
+use HeimrichHannot\Haste\Util\Format;
 use HeimrichHannot\HastePlus\Files;
 
 class CompetitionExportPdf extends \Frontend
@@ -199,7 +199,7 @@ class CompetitionExportPdf extends \Frontend
 			if (array_key_exists($strField, $this->arrSubmitted))
 			{
 				$strLabel = in_array($strField, $this->arrSkipLabels) ? '' : ($arrDcaFields[$strField]['label'] ?: $strField);
-				$strValue = FormHelper::getFormatedValueByDca($this->arrSubmitted[$strField], $arrDcaFields[$strField], $this->objDc);
+				$strValue = Format::getFormatedValueByDca($this->arrSubmitted[$strField], $arrDcaFields[$strField], $this->objDc);
 
 				$arrOutput[$strField] = array($strLabel, $strValue);
 			}

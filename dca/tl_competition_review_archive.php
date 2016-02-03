@@ -378,14 +378,13 @@ class tl_competition_review_archive extends \Backend
 	public function getExportableSubmissionFields()
 	{
 		$return = array();
-		$arrExcludedFields = array('id','pid','tstamp','sid','jid','dateAdded','disable');
-		$arrExcludedInputTypes = array('fileTree');
+		$arrExcludedFields = array('id', 'pid', 'tstamp', 'jid', 'dateAdded', 'disable');
 
 		$this->loadDataContainer('tl_competition_review');
 
 		foreach($GLOBALS['TL_DCA']['tl_competition_review']['fields'] as $k=>$v)
 		{
-			if(!in_array($k, $arrExcludedFields) && !in_array($v['inputType'], $arrExcludedInputTypes))
+			if(!in_array($k, $arrExcludedFields))
 			{
 				$return[$k] = $k;
 			}
