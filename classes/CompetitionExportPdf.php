@@ -36,7 +36,7 @@ class CompetitionExportPdf extends \Frontend
 		$arrSettings = $this->getArchiveSettings($objArchive);
 
 		// generate applicant pdf
-		if ($objArchive->pdfExportFields && $strFileName = $this->buildFilename($objMember, $objArchive))
+		if ($objArchive->pdfExportFields && $strFileName = $this->buildFilename($objDc->activeRecord->id, $objMember, $objArchive))
 		{
 			$strExportFields = $objArchive->pdfExportFields;
 			$strSkipLabels = $objArchive->pdfSkipLabels;
@@ -44,7 +44,7 @@ class CompetitionExportPdf extends \Frontend
 		}
 
 		// generate judges pdf
-		if($objArchive->pdfExportFieldsForJudges && $strFileName = $this->buildFilename($objMember, $objArchive, COMPETITION_FILENAME_SUFFIX))
+		if($objArchive->pdfExportFieldsForJudges && $strFileName = $this->buildFilename($objDc->activeRecord->id, $objMember, $objArchive, COMPETITION_FILENAME_SUFFIX))
 		{
 			$strExportFieldsForJudge = $objArchive->pdfExportFieldsForJudges;
 			$strSkipLabelsForJudge = $objArchive->pdfSkipLabelsForJudges;
@@ -53,7 +53,7 @@ class CompetitionExportPdf extends \Frontend
 	}
 
 
-	protected function buildFilename($objMember, $objArchive, $strSuffix='')
+	protected function buildFilename($intId, $objMember, $objArchive, $strSuffix='')
 	{
 		if ($objArchive->pdfExportDir && $objFolder = \FilesModel::findByUuid($objArchive->pdfExportDir))
 		{
@@ -66,7 +66,7 @@ class CompetitionExportPdf extends \Frontend
 				$strDir = Files::getPathFromUuid($objMember->protectedHomeDir);
 
 			if ($strDir)
-				return $strDir . '/' . Files::sanitizeFileName($objArchive->pdfExportFileNamePrefix . $objMember->id . $strSuffix) . '.pdf';
+				return $strDir . '/' . Files::sanitizeFileName($objArchive->pdfExportFileNamePrefix . $objMember->id . '_' . $intId . $strSuffix) . '.pdf';
 		}
 
 		return false;
