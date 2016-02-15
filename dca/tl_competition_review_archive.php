@@ -7,8 +7,8 @@ $GLOBALS['TL_DCA']['tl_competition_review_archive'] = array
 	(
 		'dataContainer'    => 'Table',
 		'ctable'           => array('tl_competition_review'),
+		'enableVersioning'  => true,
 		'switchToEdit'     => true,
-		'enableVersioning' => false,
 		'onload_callback' => array
 		(
 			array('tl_competition_review_archive', 'checkPermission'),
