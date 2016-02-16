@@ -110,4 +110,45 @@ class Competition
 		}
 	}
 
+	public static function cleanMembers(\DataContainer $objDc)
+	{
+		$intPid = \Input::get('id');
+		$blnIntroPrinted = false;
+
+		if ($intPid && ($objArchive = SubmissionArchiveModel::findByPk($intPid)) !== null && $objArchive->memberGroups)
+		{
+			$arrArchiveGroups = deserialize($objArchive->memberGroups, true);
+
+			if (!empty($arrArchiveGroups))
+			{
+				if (($objMembers = \MemberModel::findAll()) !== null)
+				{
+					while ($objMembers->next())
+					{
+						$arrGroups = deserialize($objMembers->groups, true);
+
+						if (count(array_intersect($arrGroups, $arrArchiveGroups)) > 0)
+						{
+							// check for existing submissions
+							if (SubmissionModel::findBy('mid', $objMembers->id) === null)
+							{
+								if (!$blnIntroPrinted)
+								{
+									echo $GLOBALS['TL_LANG']['tl_competition_submission']['cleanMembersIntro'] . '<br>';
+									$blnIntroPrinted = true;
+								}
+
+								echo $objMembers->id . '<br>';
+								$objMembers->groups = serialize(array_diff($arrGroups, $arrArchiveGroups));
+								$objMembers->save();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		die();
+	}
+
 }

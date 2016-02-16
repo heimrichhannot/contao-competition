@@ -30,3 +30,10 @@ $arrLang['toggle'] = array('Bewerbung deaktivieren', 'Bewerbung ID %s deaktivier
 $arrLang['delete'] = array('Bewerbung löschen', 'Bewerbung ID %s löschen');
 $arrLang['export'] = array('Exportieren (CSV)', 'Alle Bewerbungen als CSV-Datei exportieren');
 $arrLang['export_xls'] = array('Exportieren (Excel)', 'Alle Bewerbungen als Excel-Datei exportieren');
+$arrLang['clean_members'] = array('Mitglieder bereinigen', 'Entfernt die im Bewerbungsarchiv hinterlegten Mitgliedergruppen von den Mitgliedern, denen in diesem Bewerbungsarchiv noch keine Bewerbung zugeordnet ist. Besonders hilfreich nach dem Einsendeschluss.');
+
+/**
+ * Messages
+ */
+$arrLang['reallyProceed'] = 'Möchten Sie wirklich fortfahren?';
+$arrLang['cleanMembersIntro'] = 'Den folgenden Mitgliedern wurden die im Bewerbungsarchiv hinterlegten Mitgliedergruppen entzogen:';

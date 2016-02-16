@@ -15,7 +15,8 @@ array_insert(
 				'tables' => array('tl_competition_submission_archive', 'tl_competition_submission'),
 				'icon'   => 'system/modules/competition/assets/img/icon_submission.png',
 				'export' => \HeimrichHannot\Exporter\Exporter::getBackendModule(),
-				'export_xls' => \HeimrichHannot\Exporter\Exporter::getBackendModule()
+				'export_xls' => \HeimrichHannot\Exporter\Exporter::getBackendModule(),
+				'clean_members' => array('HeimrichHannot\Competition\Competition', 'cleanMembers')
 			),
 			'competition_review' => array
 			(

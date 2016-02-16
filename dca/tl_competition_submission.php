@@ -38,6 +38,14 @@ $GLOBALS['TL_DCA']['tl_competition_submission'] = array
 			'export_xls' => \HeimrichHannot\Exporter\Exporter::getGlobalOperation('export_xls',
 					$GLOBALS['TL_LANG']['tl_competition_submission']['export_xls'],
 					'system/modules/competition/assets/img/icon_export.png'),
+			'clean_members' => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['tl_competition_submission']['clean_members'],
+				'href'       => 'key=clean_members',
+				'class'      => 'header_clean_members_entities',
+				'icon'       => 'system/modules/competition/assets/img/icon_clean.png',
+				'attributes' => 'onclick="return confirm(\'' . $GLOBALS['TL_LANG']['tl_competition_submission']['reallyProceed'] . '\')"'
+			),
 			'all'    => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
