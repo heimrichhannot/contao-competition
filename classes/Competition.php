@@ -135,25 +135,34 @@ class Competition
 		die();
 	}
 
-	public static function checkForDoubleReviews($strRegexp, $varValue, \Widget $objWidget)
+	public static function checkForDoubleReviewsBe($strRegexp, $varValue, \Widget $objWidget)
 	{
 		if ($strRegexp == 'uniquesid')
 		{
-			if (($objReview = ReviewModel::findByPk(\Input::get('id'))) !== null)
-			{
-				$objReviews = \HeimrichHannot\Competition\ReviewModel::findOneBy(array('sid=?', 'jid=?', 'tl_competition_review.id!=?'), array($varValue, $objReview->jid, \Input::get('id')));
-
-				// check for already existing reviews by the member for the current submission
-				if ($objReviews !== null)
-				{
-					$objWidget->addError($GLOBALS['TL_LANG']['MSC']['reviewAlreadyExisting']);
-				}
-			}
-
+			static::doCheckForDoubleReviews($objWidget, $varValue, \Input::get('table'));
 			return true;
 		}
 
 		return false;
+	}
+
+	public static function checkForDoubleReviewsFe(\Widget $objWidget, $strTable)
+	{
+		static::doCheckForDoubleReviews($objWidget, $objWidget->value, $strTable);
+	}
+
+	protected static function doCheckForDoubleReviews(\Widget $objWidget, $varValue, $strTable)
+	{
+		if ($strTable == 'tl_competition_review' && ($objReview = ReviewModel::findByPk(\Input::get('id'))) !== null)
+		{
+			$objReviews = \HeimrichHannot\Competition\ReviewModel::findOneBy(array('sid=?', 'jid=?', 'tl_competition_review.id!=?'), array($varValue, $objReview->jid, \Input::get('id')));
+
+			// check for already existing reviews by the member for the current submission
+			if ($objReviews !== null)
+			{
+				$objWidget->addError($GLOBALS['TL_LANG']['MSC']['reviewAlreadyExisting']);
+			}
+		}
 	}
 
 }

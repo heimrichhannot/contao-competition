@@ -33,7 +33,8 @@ array_insert(
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['addCustomRegexp']['checkForDoubleReviews'] = array('HeimrichHannot\Competition\Competition', 'checkForDoubleReviews');
+$GLOBALS['TL_HOOKS']['addCustomRegexp']['checkForDoubleReviewsBe'] = array('HeimrichHannot\Competition\Competition', 'checkForDoubleReviewsBe');
+$GLOBALS['TL_HOOKS']['formHybridValidateFormField']['checkForDoubleReviewsFe'] = array('HeimrichHannot\Competition\Competition', 'checkForDoubleReviewsFe');
 
 
 /**
