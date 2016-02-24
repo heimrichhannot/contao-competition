@@ -5,4 +5,4 @@ define('COMPETITION_FILENAME_SUFFIX', '_judges');
 /**
  * Messages
  */
-$GLOBALS['TL_LANG']['frontendedit']['noAllowedSubmissionsLeft'] = 'Es gibt bereits eine Bewertung für alle für Sie verfügbaren Bewerbungen.';
+$GLOBALS['TL_LANG']['MSC']['reviewAlreadyExisting'] = 'Für die von Ihnen gewählte Bewerbung wurde vom hinterlegten Juroren bereits eine Bewertung verfasst.';

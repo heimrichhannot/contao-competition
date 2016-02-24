@@ -131,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 			'inputType'               => 'select',
 			'foreignKey'              => 'tl_competition_submission.id',
 			'options_callback'        => array('tl_competition_review', 'getAllowedSubmissionsAsOptions'),
-			'eval'                    => array('mandatory' => true, 'tl_class' => 'w50', 'includeBlankOption' => true),
+			'eval'                    => array('mandatory' => true, 'tl_class' => 'w50', 'includeBlankOption' => true, 'submitOnChange' => true, 'rgxp' => 'uniquesid'),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'",
 			'relation'                => array('type'=>'belongsTo', 'load'=>'lazy')
 		),

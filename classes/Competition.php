@@ -71,7 +71,7 @@ class Competition
 		$blnIncludeEmptyFieldnames = false)
 	{
 		$arrOptions = array();
-		$arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId, true);
+		$arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId);
 
 		if (($objReviewArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($intReviewPid)) !== null)
 		{
@@ -92,22 +92,6 @@ class Competition
 		}
 
 		return $arrOptions;
-	}
-
-	public static function checkForExistingReviews($objModule)
-	{
-		$objMember = \FrontendUser::getInstance();
-		$arrAllowedSubmissions = SubmissionModel::getAllowedSubmissions($objMember->id, true);
-
-		if ($objModule->formHybridDataContainer != 'tl_competition_review') return;
-
-		if (empty($arrAllowedSubmissions))
-		{
-			if (in_array('status_messages', \ModuleLoader::getActive()))
-				StatusMessage::addError($GLOBALS['TL_LANG']['competition']['noAllowedSubmissionsLeft'], $objModule->id);
-
-			return false;
-		}
 	}
 
 	public static function cleanMembers(\DataContainer $objDc)
@@ -149,6 +133,27 @@ class Competition
 		}
 
 		die();
+	}
+
+	public static function checkForDoubleReviews($strRegexp, $varValue, \Widget $objWidget)
+	{
+		if ($strRegexp == 'uniquesid')
+		{
+			if (($objReview = ReviewModel::findByPk(\Input::get('id'))) !== null)
+			{
+				$objReviews = \HeimrichHannot\Competition\ReviewModel::findOneBy(array('sid=?', 'jid=?', 'tl_competition_review.id!=?'), array($varValue, $objReview->jid, \Input::get('id')));
+
+				// check for already existing reviews by the member for the current submission
+				if ($objReviews !== null)
+				{
+					$objWidget->addError($GLOBALS['TL_LANG']['MSC']['reviewAlreadyExisting']);
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 }
