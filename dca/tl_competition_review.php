@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 			'foreignKey'              => 'tl_competition_submission.id',
 			'options_callback'        => array('tl_competition_review', 'getAllowedSubmissionsAsOptions'),
 			'eval'                    => array('mandatory' => true, 'tl_class' => 'w50', 'includeBlankOption' => true, 'submitOnChange' => true, 'rgxp' => 'uniquesid'),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+			'sql'                     => "varchar(10) NOT NULL default ''",
 			'relation'                => array('type'=>'belongsTo', 'load'=>'lazy')
 		),
 		'pdfExportFile' => array

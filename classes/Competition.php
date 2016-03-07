@@ -139,6 +139,18 @@ class Competition
 	{
 		if ($strRegexp == 'uniquesid')
 		{
+			// digit first
+			if (substr_count($varValue, ',') == 1 && strpos($varValue, '.') === false)
+			{
+				$varValue = str_replace(',', '.', $varValue);
+			}
+
+			if (!\Validator::isNumeric($varValue))
+			{
+				$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
+			}
+
+			// then unique sid
 			static::doCheckForDoubleReviews($objWidget, $varValue, \Input::get('table'));
 			return true;
 		}
