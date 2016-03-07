@@ -164,7 +164,7 @@ class Competition
 
 	public static function checkForDoubleReviewsFe(\Widget $objWidget, $strTable)
 	{
-		if (!$objWidget->value)
+		if (!$objWidget->value || $objWidget->name != 'sid')
 			return;
 
 		// digit first
