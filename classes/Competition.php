@@ -139,19 +139,23 @@ class Competition
 	{
 		if ($strRegexp == 'uniquesid')
 		{
-			// digit first
-			if (substr_count($varValue, ',') == 1 && strpos($varValue, '.') === false)
+			if ($varValue)
 			{
-				$varValue = str_replace(',', '.', $varValue);
+				// digit first
+				if (substr_count($varValue, ',') == 1 && strpos($varValue, '.') === false)
+				{
+					$varValue = str_replace(',', '.', $varValue);
+				}
+
+				if (!\Validator::isNumeric($varValue))
+				{
+					$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
+				}
+
+				// then unique sid
+				static::doCheckForDoubleReviews($objWidget, $varValue, \Input::get('table'));
 			}
 
-			if (!\Validator::isNumeric($varValue))
-			{
-				$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
-			}
-
-			// then unique sid
-			static::doCheckForDoubleReviews($objWidget, $varValue, \Input::get('table'));
 			return true;
 		}
 
@@ -160,6 +164,21 @@ class Competition
 
 	public static function checkForDoubleReviewsFe(\Widget $objWidget, $strTable)
 	{
+		if (!$objWidget->value)
+			return;
+
+		// digit first
+		if (substr_count($objWidget->value, ',') == 1 && strpos($objWidget->value, '.') === false)
+		{
+			$objWidget->value = str_replace(',', '.', $objWidget->value);
+		}
+
+		if (!\Validator::isNumeric($objWidget->value))
+		{
+			$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
+		}
+
+		// then unique sid
 		static::doCheckForDoubleReviews($objWidget, $objWidget->value, $strTable);
 	}
 
