@@ -1,5 +1,7 @@
 <?php
 
+define('COMPETITION_FILENAME_SUFFIX', '_judges');
+
 /**
  * Back end modules
  */
@@ -14,16 +16,16 @@ array_insert(
 			(
 				'tables' => array('tl_competition_submission_archive', 'tl_competition_submission'),
 				'icon'   => 'system/modules/competition/assets/img/icon_submission.png',
-				'export' => \HeimrichHannot\Exporter\Exporter::getBackendModule(),
-				'export_xls' => \HeimrichHannot\Exporter\Exporter::getBackendModule(),
+				'export' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule(),
+				'export_xls' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule(),
 				'clean_members' => array('HeimrichHannot\Competition\Competition', 'cleanMembers')
 			),
 			'competition_review' => array
 			(
 				'tables' => array('tl_competition_review_archive', 'tl_competition_review'),
 				'icon'   => 'system/modules/competition/assets/img/icon_review.png',
-				'export' => \HeimrichHannot\Exporter\Exporter::getBackendModule(),
-				'export_xls' => \HeimrichHannot\Exporter\Exporter::getBackendModule()
+				'export' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule(),
+				'export_xls' => \HeimrichHannot\Exporter\ModuleExporter::getBackendModule()
 			)
 		)
 	)

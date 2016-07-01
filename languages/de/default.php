@@ -1,7 +1,5 @@
 <?php
 
-define('COMPETITION_FILENAME_SUFFIX', '_judges');
-
 /**
  * Messages
  */

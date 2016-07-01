@@ -32,10 +32,10 @@ $GLOBALS['TL_DCA']['tl_competition_submission'] = array
 		),
 		'global_operations' => array
 		(
-			'export' => \HeimrichHannot\Exporter\Exporter::getGlobalOperation('export',
+			'export' => \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation('export',
 					$GLOBALS['TL_LANG']['tl_competition_submission']['export'],
 					'system/modules/competition/assets/img/icon_export.png'),
-			'export_xls' => \HeimrichHannot\Exporter\Exporter::getGlobalOperation('export_xls',
+			'export_xls' => \HeimrichHannot\Exporter\ModuleExporter::getGlobalOperation('export_xls',
 					$GLOBALS['TL_LANG']['tl_competition_submission']['export_xls'],
 					'system/modules/competition/assets/img/icon_export.png'),
 			'clean_members' => array
