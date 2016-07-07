@@ -89,6 +89,7 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 	(
 		'id' => array
 		(
+			'label' => &$GLOBALS['TL_LANG']['MSC']['id'],
 			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
 		),
 		'pid' => array
