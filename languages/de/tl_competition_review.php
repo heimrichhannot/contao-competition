@@ -8,7 +8,7 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_competition_review'];
 $arrLang['jid'] = array('Juror', 'Wählen Sie hier einen Juroren aus.');
 $arrLang['sid'] = array('Bewerbung', 'Wählen Sie hier die zugehörige Bewerbung aus.');
 $arrLang['pdfExportFile'] = array('PDF-Exportdatei', 'Wählen Sie hier die Datei, die die Bewertung enthält.');
-$arrLang['disable'] = array('Deaktivieren', 'Wählen Sie diese Option, um die Bewertung zu deaktivieren.');
+$arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Bewertung zu aktivieren.');
 
 /**
  * Legends

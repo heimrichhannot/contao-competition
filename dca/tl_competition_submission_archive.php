@@ -367,7 +367,7 @@ class tl_competition_submission_archive extends \Backend
 	public function getExportableSubmissionFields()
 	{
 		$return = array();
-		$arrExcludedFields = array('id','pid','tstamp','mid','allowedJids','dateAdded','disable');
+		$arrExcludedFields = array('id','pid','tstamp','mid','allowedJids','dateAdded','published');
 		$arrExcludedInputTypes = array('fileTree');
 
 		$this->loadDataContainer('tl_competition_submission');

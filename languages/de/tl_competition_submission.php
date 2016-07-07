@@ -9,7 +9,7 @@ $arrLang['mid'] = array('Bewerber', 'Wählen Sie hier den Bewerber aus.');
 $arrLang['allowedJids'] = array('Erlaubte Juroren', 'Geben Sie hier alle Juroren an, die die Möglichkeit haben sollen, diese Bewerbung zu bewerten.');
 $arrLang['pdfExportFile'] = array('PDF-Exportdatei', 'Diese Datei können sich die Bewerber herunterladen.');
 $arrLang['pdfExportFileForJudges'] = array('PDF-Exportdatei (Juror)', 'Diese Datei können sich die Juroren für die Bewertung herunterladen.');
-$arrLang['disable'] = array('Deaktivieren', 'Wählen Sie diese Option, um die Bewertung zu deaktivieren. Eine deaktivierte Bewerbung kann nicht bewertet werden.');
+$arrLang['published'] = array('Aktiviert', 'Wählen Sie diese Option, um die Bewertung zu aktivieren. Eine deaktivierte Bewerbung kann nicht bewertet werden.');
 
 
 /**

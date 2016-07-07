@@ -27,7 +27,7 @@ class SubmissionModel extends \Model
 		{
 			while ($objSubmissions->next())
 			{
-				if (!$objSubmissions->disable && in_array($intMemberId, deserialize($objSubmissions->allowedJids, true)))
+				if ($objSubmissions->published && in_array($intMemberId, deserialize($objSubmissions->allowedJids, true)))
 				{
 					$objReview = ReviewModel::findOneBy(array('sid=?', 'jid=?'), array($objSubmissions->id, $intMemberId));
 					// check for already existing reviews by the member for the current submission

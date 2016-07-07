@@ -10,7 +10,7 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 		'onsubmit_callback' => array
 		(
 			'setDateAdded' => array('HeimrichHannot\\HastePlus\\Utilities', 'setDateAdded'),
-			'checkDisableForPdfGeneration' => array('tl_competition_review', 'checkDisableForPdfGeneration')
+			'checkPublishedForPdfGeneration' => array('tl_competition_review', 'checkPublishedForPdfGeneration')
 		),
 		'sql' => array
 		(
@@ -83,7 +83,7 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 		)
 	),
 	'palettes' => array(
-		'default' => '{general_legend},jid,sid,pdfExportFile;{publish_legend},disable;'
+		'default' => '{general_legend},jid,sid,pdfExportFile;{publish_legend},published;'
 	),
 	'fields'   => array
 	(
@@ -147,10 +147,10 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 				'tl_class' => 'long clr'),
 			'sql'                     => "binary(16) NULL"
 		),
-		'disable' => array
+		'published' => array
 		(
 			'default'                 => true,
-			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review']['disable'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review']['published'],
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
@@ -183,9 +183,9 @@ class tl_competition_review extends \Backend
 		return $strReview;
 	}
 
-	public static function checkDisableForPdfGeneration(\DataContainer $objDc)
+	public static function checkPublishedForPdfGeneration(\DataContainer $objDc)
 	{
-		if(!$objDc->activeRecord->disable)
+		if(!$objDc->activeRecord->published)
 		{
 			$objPdf = new HeimrichHannot\Competition\CompetitionExportPdf($objDc, 'tl_competition_review_archive', 'tl_competition_review');
 			$varPdfUuid = $objPdf->uuidApplicantFile;
@@ -329,14 +329,14 @@ class tl_competition_review extends \Backend
 		}
 
 		// Check permissions AFTER checking the tid, so hacking attempts are logged
-		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_competition_review::disable', 'alexf'))
+		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_competition_review::published', 'alexf'))
 		{
 			return '';
 		}
 
-		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['disable'] ? 1 : '');
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? 1 : '');
 
-		if ($row['disable'])
+		if (!$row['published'])
 		{
 			$icon = 'invisible.gif';
 		}
@@ -346,7 +346,7 @@ class tl_competition_review extends \Backend
 
 
 	/**
-	 * Disable/enable a user group
+	 * published/enable a user group
 	 * @param integer
 	 * @param boolean
 	 */
@@ -360,10 +360,10 @@ class tl_competition_review extends \Backend
 		Input::setGet('act', 'toggle');
 		$this->checkPermission();
 
-		// Check permissions to disable
-		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_competition_review::disable', 'alexf'))
+		// Check permissions to published
+		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_competition_review::published', 'alexf'))
 		{
-			\Controller::log('Not enough permissions to disable/enable subscription item ID "'.$intId.'"', 'tl_competition_review toggleVisibility', TL_ERROR);
+			\Controller::log('Not enough permissions to published/enable subscription item ID "'.$intId.'"', 'tl_competition_review toggleVisibility', TL_ERROR);
 			\Controller::redirect('contao/main.php?act=error');
 		}
 
@@ -371,9 +371,9 @@ class tl_competition_review extends \Backend
 		$objVersions->initialize();
 
 		// Trigger the save_callback
-		if (is_array($GLOBALS['TL_DCA']['tl_competition_review']['fields']['disable']['save_callback']))
+		if (is_array($GLOBALS['TL_DCA']['tl_competition_review']['fields']['published']['save_callback']))
 		{
-			foreach ($GLOBALS['TL_DCA']['tl_competition_review']['fields']['disable']['save_callback'] as $callback)
+			foreach ($GLOBALS['TL_DCA']['tl_competition_review']['fields']['published']['save_callback'] as $callback)
 			{
 				$this->import($callback[0]);
 				$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
@@ -381,7 +381,7 @@ class tl_competition_review extends \Backend
 		}
 
 		// Update the database
-		$objDatabase->prepare("UPDATE tl_competition_review SET tstamp=". time() .", disable='" . ($blnVisible ? '' : 1) . "' WHERE id=?")
+		$objDatabase->prepare("UPDATE tl_competition_review SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
 			->execute($intId);
 
 		$objVersions->create();
