@@ -185,13 +185,12 @@ $GLOBALS['TL_DCA']['tl_competition_submission'] = array
 		// publish
 		'published' => array
 		(
-			'default'                 => true,
 			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_submission']['published'],
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50', 'doNotCopy'=>true),
-			'sql'                     => "char(1) NOT NULL default '0'"
+			'sql'                     => "char(1) NOT NULL default ''"
 		)
 	)
 );
