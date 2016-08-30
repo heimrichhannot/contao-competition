@@ -7,9 +7,11 @@ $GLOBALS['TL_DCA']['tl_competition_review'] = array
 		'dataContainer'     => 'Table',
 		'ptable'            => 'tl_competition_review_archive',
 		'enableVersioning'  => true,
+		'onload_callback' => array(
+			'setDateAdded' => array('HeimrichHannot\\HastePlus\\Utilities', 'setDateAdded', true)
+		),
 		'onsubmit_callback' => array
 		(
-			'setDateAdded' => array('HeimrichHannot\\HastePlus\\Utilities', 'setDateAdded'),
 			'checkPublishedForPdfGeneration' => array('tl_competition_review', 'checkPublishedForPdfGeneration')
 		),
 		'sql' => array
@@ -187,6 +189,9 @@ class tl_competition_review extends \Backend
 	{
 		if(!$objDc->activeRecord->published)
 		{
+			if (($objArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($objDc->pid)) === null || !$objArchive->addPdfExport)
+				return;
+
 			$objPdf = new HeimrichHannot\Competition\CompetitionExportPdf($objDc, 'tl_competition_review_archive', 'tl_competition_review');
 			$varPdfUuid = $objPdf->uuidApplicantFile;
 			\Database::getInstance()->prepare("UPDATE tl_competition_review SET pdfExportFile=? WHERE id=?")

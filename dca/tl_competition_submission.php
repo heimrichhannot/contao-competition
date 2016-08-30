@@ -7,9 +7,11 @@ $GLOBALS['TL_DCA']['tl_competition_submission'] = array
 		'dataContainer'     => 'Table',
 		'ptable'            => 'tl_competition_submission_archive',
 		'enableVersioning'  => true,
+		'onload_callback' => array(
+			'setDateAdded' => array('HeimrichHannot\\HastePlus\\Utilities', 'setDateAdded', true)
+		),
 		'onsubmit_callback' => array
 		(
-			'setDateAdded' => array('HeimrichHannot\\HastePlus\\Utilities', 'setDateAdded'),
 			'checkPublishedForPdfGeneration' => array('tl_competition_submission', 'checkPublishedForPdfGeneration')
 		),
 		'sql' => array
