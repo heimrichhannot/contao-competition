@@ -4,6 +4,7 @@ namespace HeimrichHannot\Competition;
 
 use Contao\MemberModel;
 use HeimrichHannot\Haste\Util\Format;
+use HeimrichHannot\Haste\Util\FormSubmission;
 use HeimrichHannot\HastePlus\Files;
 
 class CompetitionExportPdf extends \Frontend
@@ -192,17 +193,17 @@ class CompetitionExportPdf extends \Frontend
 	protected function setOutputValues()
 	{
 		\Controller::loadDataContainer('tl_competition_submission');
-		$arrDcaFields = $GLOBALS['TL_DCA']['tl_competition_submission']['fields'];
 		\Controller::loadLanguageFile('tl_competition_submission');
+		$arrDcaFields = $GLOBALS['TL_DCA']['tl_competition_submission']['fields'];
 
 		$arrOutput = array();
 
 		foreach($this->arrExportFields as $strField)
 		{
-			if (array_key_exists($strField, $this->arrSubmitted))
+			if (array_key_exists($strField, $_POST))
 			{
 				$strLabel = in_array($strField, $this->arrSkipLabels) ? '' : ($arrDcaFields[$strField]['label'] ?: $strField);
-				$strValue = Format::getFormatedValueByDca($this->arrSubmitted[$strField], $arrDcaFields[$strField], $this->objDc);
+				$strValue = FormSubmission::prepareSpecialValueForPrint($this->arrSubmitted[$strField], $arrDcaFields[$strField], 'tl_competition_submission', $this->objDc);
 
 				$arrOutput[$strField] = array($strLabel, $strValue);
 			}
