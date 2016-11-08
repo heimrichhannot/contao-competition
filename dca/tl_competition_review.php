@@ -187,7 +187,7 @@ class tl_competition_review extends \Backend
 
 	public static function checkPublishedForPdfGeneration(\DataContainer $objDc)
 	{
-		if(!$objDc->activeRecord->published)
+		if($objDc->activeRecord->published)
 		{
 			if (($objArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($objDc->pid)) === null || !$objArchive->addPdfExport)
 				return;

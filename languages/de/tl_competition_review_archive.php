@@ -17,14 +17,15 @@ $arrLang['pdfTemplate']					= array('PDF-Vorlage', 'Wählen Sie hier ein Templat
 $arrLang['pdfFonts']					= array('PDF-Fonts', 'Wählen Sie hier die Fonts, welche im PDF verwendet werden sollen.');
 $arrLang['pdfMargins']					= array('PDF-Margins', 'Wählen Sie hier die Seitenabstände, welche im PDF verwendet werden sollen.');
 $arrLang['pdfExportFileNamePrefix']		= array('Prefix für Dateiname', 'Geben Sie hier den Prefix ein, der dem Dateinamen hinzugefügt werden soll.');
-$arrLang['pdfExportDir']				= array('Exportverzeichnis', 'Wählen Sie hier das Verzeichnis aus, dem die exportierten Dateien hinzugefügt werden sollen.');
-$arrLang['pdfExportUseHomeDir']			= array('Benutzerverzeichnisse verwenden', 'Wählen Sie diese Option, wenn die exportierten Dateien vorrangig dem Benutzerverzeichnis hinzugefügt werden sollen. Hat das aktuell eingeloggte Mitglied kein Benutzerverzeichnis, wird das Exportverzeichnis genutzt.');
-$arrLang['pdfExportUseProtectedHomeDir']= array('Geschützte Benutzerverzeichnisse verwenden', 'Wählen Sie diese Option, wenn die exportierten Dateien vorrangig dem geschützten Benutzerverzeichnis, dann dem normalen und dann dem Exportverzeichnis hinzugefügt werden sollen.');
 $arrLang['pdfExportFileTitle']			= array('Meta Titel', 'Hier können Sie den Titel für das Dokument angeben.');
 $arrLang['pdfExportFileSubject']		= array('Meta Thema', 'Hier können Sie das Thema für das Dokument angeben.');
 $arrLang['pdfExportFileCreator']		= array('Meta Ersteller/Autor', 'Hier können Sie den Ersteller/Autor für das Dokument angeben.');
 $arrLang['pdfSkipLabels']				= array('Labels überspringen', 'Geben Sie hier die Labels an, die im PDF nicht ausgegeben werden sollen.');
 $arrLang['pdfExportFields']				= array('Zu exportierende Felder', 'Wählen Sie hier die Felder aus, welche im PDF erscheinen sollen.');
+$arrLang['filesDir']					= array('Exportverzeichnis', 'Wählen Sie hier das Verzeichnis aus, dem die exportierten Dateien hinzugefügt werden sollen.');
+$arrLang['filesUseHomeDir']				= array('Benutzerverzeichnisse verwenden', 'Wählen Sie diese Option, wenn die exportierten Dateien vorrangig dem Benutzerverzeichnis hinzugefügt werden sollen. Hat das aktuell eingeloggte Mitglied kein Benutzerverzeichnis, wird das Exportverzeichnis genutzt.');
+$arrLang['filesUseProtectedHomeDir']	= array('Geschützte Benutzerverzeichnisse verwenden', 'Wählen Sie diese Option, wenn die exportierten Dateien vorrangig dem geschützten Benutzerverzeichnis, dann dem normalen und dann dem Exportverzeichnis hinzugefügt werden sollen.');
+$arrLang['filesDirName']				= array('Archiv-Verzeichnisname', 'Geben Sie hier bei Bedarf einen Verzeichnisnamen ein, der im Exportverzeichnis erzeugt wird (bspw. "meinwettbewerb").');
 
 /**
  * Legends

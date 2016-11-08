@@ -97,7 +97,7 @@ $GLOBALS['TL_DCA']['tl_competition_review_archive'] = array
 	'palettes' => array
 	(
 		'__selector__' => array('addPdfExport', 'addPdfCover'),
-		'default' => 'title,memberGroups,submissionArchives,addPdfExport;'
+		'default' => 'title,memberGroups,submissionArchives,filesDir,filesUseHomeDir,filesDirName,addPdfExport;'
 	),
 
 	// Subpalettes
@@ -258,22 +258,6 @@ $GLOBALS['TL_DCA']['tl_competition_review_archive'] = array
 			'eval'                    => array('maxlength'=>50, 'tl_class' => 'w50'),
 			'sql'                     => "varchar(50) NOT NULL default ''"
 		),
-		'pdfExportDir' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['pdfExportDir'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'mandatory' => true, 'tl_class'=>'w50'),
-			'sql'                     => "binary(16) NULL"
-		),
-		'pdfExportUseHomeDir' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['pdfExportUseHomeDir'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'					  => array('tl_class' => 'w50'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
 		'pdfExportFileTitle' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['pdfExportFileTitle'],
@@ -324,6 +308,29 @@ $GLOBALS['TL_DCA']['tl_competition_review_archive'] = array
 				'multiple' => true,
 				'tl_class' => 'long clr'),
 			'sql'               => "blob NULL"
+		),
+		'filesDir' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['filesDir'],
+			'exclude'                 => true,
+			'inputType'               => 'fileTree',
+			'eval'                    => array('fieldType'=>'radio', 'mandatory' => true, 'tl_class'=>'w50'),
+			'sql'                     => "binary(16) NULL"
+		),
+		'filesUseHomeDir' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['filesUseHomeDir'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'					  => array('tl_class' => 'w50'),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'filesDirName' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['filesDirName'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength' => 64, 'tl_class' => 'w50'),
+			'sql'                     => "varchar(64) NOT NULL default ''"
 		)
 	)
 );
@@ -332,17 +339,17 @@ $arrDca = &$GLOBALS['TL_DCA']['tl_competition_review_archive'];
 
 $arrDca['grouppalettes']['pdfExport'] = '{cover_legend:hide},addPdfCover;
 		{config_legend:hide},pdfBackground,pdfTemplate,pdfFonts,pdfMargins;
-		{exportFile_legend},pdfExportFileNamePrefix,pdfExportDir,pdfExportUseHomeDir,pdfExportFileTitle,pdfExportFileSubject,pdfExportFileCreator;
+		{exportFile_legend},pdfExportFileNamePrefix,pdfExportFileTitle,pdfExportFileSubject,pdfExportFileCreator;
 		{exportForApplicant_legend:hide},pdfSkipLabels,pdfExportFields';
 
 if (in_array('protected_homedirs', \ModuleLoader::getActive()))
 {
-	$arrDca['grouppalettes']['pdfExport'] = str_replace('pdfExportUseHomeDir',
-		'pdfExportUseHomeDir,pdfExportUseProtectedHomeDir', $arrDca['grouppalettes']['pdfExport']);
+	$arrDca['palettes']['default'] = str_replace('filesUseHomeDir',
+		'filesUseHomeDir,filesUseProtectedHomeDir', $arrDca['palettes']['default']);
 
-	$arrDca['fields']['pdfExportUseProtectedHomeDir'] = array
+	$arrDca['fields']['filesUseProtectedHomeDir'] = array
 	(
-		'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['pdfExportUseProtectedHomeDir'],
+		'label'                   => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['filesUseProtectedHomeDir'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
 		'eval'					  => array('tl_class' => 'w50'),

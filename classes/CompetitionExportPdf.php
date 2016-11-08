@@ -55,15 +55,18 @@ class CompetitionExportPdf extends \Frontend
 
 	protected function buildFilename($intId, $objMember, $objArchive, $strSuffix='')
 	{
-		if ($objArchive->pdfExportDir && $objFolder = \FilesModel::findByUuid($objArchive->pdfExportDir))
+		if ($objArchive->filesDir && $objFolder = \FilesModel::findByUuid($objArchive->filesDir))
 		{
 			$strDir = $objFolder->path;
 
-			if ($objArchive->pdfExportUseHomeDir && $objMember->homeDir)
+			if ($objArchive->filesUseHomeDir && $objMember->homeDir)
 				$strDir = Files::getPathFromUuid($objMember->homeDir);
 
-			if ($objArchive->pdfExportUseProtectedHomeDir && $objMember->protectedHomeDir)
+			if ($objArchive->filesUseProtectedHomeDir && $objMember->protectedHomeDir)
 				$strDir = Files::getPathFromUuid($objMember->protectedHomeDir);
+
+			if ($objArchive->filesDirName)
+				$strDir .= '/' . $objArchive->filesDirName;
 
 			if ($strDir)
 				return $strDir . '/' . Files::sanitizeFileName($objArchive->pdfExportFileNamePrefix . $objMember->id . '_' . $intId . $strSuffix) . '.pdf';
