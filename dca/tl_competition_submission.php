@@ -10,10 +10,6 @@ $GLOBALS['TL_DCA']['tl_competition_submission'] = array
 		'onload_callback' => array(
 			'setDateAdded' => array('HeimrichHannot\\HastePlus\\Utilities', 'setDateAdded', true)
 		),
-		'onsubmit_callback' => array
-		(
-			'checkPublishedForPdfGeneration' => array('tl_competition_submission', 'checkPublishedForPdfGeneration')
-		),
 		'sql' => array
 		(
 			'keys' => array
@@ -231,20 +227,6 @@ class tl_competition_submission extends \Backend
 
 		return \HeimrichHannot\Competition\Competition::getAllowedMembersAsOptions($intId, \HeimrichHannot\Competition\Competition::MODE_REVIEW);
 	}
-
-
-	public static function checkPublishedForPdfGeneration(\DataContainer $objDc)
-	{
-		if ($objDc->activeRecord->published)
-		{
-			$objPdf = new HeimrichHannot\Competition\CompetitionExportPdf($objDc, 'tl_competition_submission_archive', 'tl_competiton_submission');
-			$varPdfUuid = $objPdf->uuidApplicantFile;
-			$varPdfForJudgesUuid = $objPdf->uuidJudgesFile;
-			\Database::getInstance()->prepare("UPDATE tl_competition_submission SET pdfExportFile=?, pdfExportFileForJudges=? WHERE id=?")
-				->execute($varPdfUuid, $varPdfForJudgesUuid, $objDc->activeRecord->id);
-		}
-	}
-
 
 	/**
 	 * Check permissions to edit table tl_competition_submission
