@@ -76,7 +76,7 @@ $GLOBALS['TL_DCA']['tl_competition_review_archive'] = array(
 
     // Palettes
     'palettes' => array(
-        'default' => 'title,memberGroups,submissionArchives,filesDir,filesUseHomeDir,filesDirName;',
+        'default' => 'title,memberGroups,submissionArchive,filesDir,filesUseHomeDir,filesDirName;',
     ),
 
     // Fields
@@ -109,18 +109,17 @@ $GLOBALS['TL_DCA']['tl_competition_review_archive'] = array(
             'sql'        => "blob NULL",
             'relation'   => array('type' => 'belongsToMany', 'load' => 'lazy'),
         ),
-        'submissionArchives' => array(
-            'label'      => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['submissionArchives'],
+        'submissionArchive' => array(
+            'label'      => &$GLOBALS['TL_LANG']['tl_competition_review_archive']['submissionArchive'],
             'exclude'    => true,
             'inputType'  => 'select',
             'foreignKey' => 'tl_competition_submission_archive.title',
             'eval'       => array(
                 'tl_class'           => 'w50',
                 'chosen'             => true,
-                'multiple'           => true,
                 'includeBlankOption' => true,
             ),
-            'sql'        => "blob NULL",
+            'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => array('type' => 'belongsToMany', 'load' => 'lazy'),
         ),
         'filesDir'           => array(

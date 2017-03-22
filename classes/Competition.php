@@ -1,6 +1,7 @@
 <?php
 
 namespace HeimrichHannot\Competition;
+
 use HeimrichHannot\HastePlus\Arrays;
 use HeimrichHannot\StatusMessages\StatusMessage;
 
@@ -15,185 +16,194 @@ use HeimrichHannot\StatusMessages\StatusMessage;
 class Competition
 {
 
-	const MODE_SUBMISSION = 'submission';
-	const MODE_REVIEW = 'review';
+    const MODE_SUBMISSION = 'submission';
+    const MODE_REVIEW     = 'review';
 
-	protected static $arrAllowedMembers;
+    protected static $arrAllowedMembers;
 
-	public static function getAllowedMembersAsOptions($intPid, $intMode)
-	{
-		if(static::$arrAllowedMembers !== null)
-			return static::$arrAllowedMembers;
+    public static function getAllowedMembersAsOptions($intPid, $intMode)
+    {
+        if (static::$arrAllowedMembers !== null)
+        {
+            return static::$arrAllowedMembers;
+        }
 
-		$arrOptions = array();
+        $arrOptions = [];
 
-		switch ($intMode)
-		{
-			case static::MODE_REVIEW:
-				$strArchiveClass = 'HeimrichHannot\Competition\ReviewArchiveModel';
-				break;
-			default:
-				$strArchiveClass = 'HeimrichHannot\Competition\SubmissionArchiveModel';
-				break;
-		}
+        switch ($intMode)
+        {
+            case static::MODE_REVIEW:
+                $strArchiveClass = 'HeimrichHannot\Competition\ReviewArchiveModel';
+                break;
+            default:
+                $strArchiveClass = 'HeimrichHannot\Competition\SubmissionArchiveModel';
+                break;
+        }
 
-		$objArchive = $strArchiveClass::findByPk($intPid);
+        $objArchive = $strArchiveClass::findByPk($intPid);
 
-		if ($objArchive !== null)
-		{
-			$arrAllowedGroups = deserialize($objArchive->memberGroups, true);
+        if ($objArchive !== null)
+        {
+            $arrAllowedGroups = deserialize($objArchive->memberGroups, true);
 
-			if (($objMembers = \MemberModel::findAll()) !== null)
-			{
-				while ($objMembers->next())
-				{
-					$arrGroups = deserialize($objMembers->groups, true);
+            if (($objMembers = \MemberModel::findAll()) !== null)
+            {
+                while ($objMembers->next())
+                {
+                    $arrGroups = deserialize($objMembers->groups, true);
 
-					// no memberGroups defined -> all members are allowed
-					if (empty($arrAllowedGroups) || array_intersect($arrAllowedGroups, $arrGroups))
-					{
-						$arrOptions[$objMembers->id] = $objMembers->firstname .  ' ' . $objMembers->lastname;
-					}
-				}
-			}
-		}
+                    // no memberGroups defined -> all members are allowed
+                    if (empty($arrAllowedGroups) || array_intersect($arrAllowedGroups, $arrGroups))
+                    {
+                        $arrOptions[$objMembers->id] = $objMembers->firstname . ' ' . $objMembers->lastname;
+                    }
+                }
+            }
+        }
 
-		$arrOptions = Arrays::array_unique_keys($arrOptions);
+        $arrOptions = Arrays::array_unique_keys($arrOptions);
 
-		asort($arrOptions);
+        asort($arrOptions);
 
-		static::$arrAllowedMembers = $arrOptions;
+        static::$arrAllowedMembers = $arrOptions;
 
-		return $arrOptions;
-	}
+        return $arrOptions;
+    }
 
-	public static function getAllowedSubmissionsAsOptions($intReviewPid, $intMemberId, $strSubmissionFieldname = 'id',
-		$blnIncludeEmptyFieldnames = false)
-	{
-		$arrOptions = array();
-		$arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId);
+    public static function getAllowedSubmissionsAsOptions(
+        $intReviewPid,
+        $intMemberId,
+        $strSubmissionFieldname = 'id',
+        $blnIncludeEmptyFieldnames = false
+    ) {
+        $arrOptions            = [];
+        $arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId);
 
-		if (($objReviewArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($intReviewPid)) !== null)
-		{
-			$arrAllowedArchives = deserialize($objReviewArchive->submissionArchives, true);
+        if (($objReviewArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($intReviewPid)) !== null)
+        {
+            foreach ($arrAllowedSubmissions as $objSubmission)
+            {
+                if ($objSubmission->pid == $objReviewArchive->submissionArchive
+                    && ($blnIncludeEmptyFieldnames
+                        || $objSubmission->{$strSubmissionFieldname})
+                )
+                {
+                    $arrOptions[$objSubmission->id] = $objSubmission->{$strSubmissionFieldname};
+                }
+            }
 
-			if (!empty($arrAllowedSubmissions))
-			{
-				foreach ($arrAllowedSubmissions as $objSubmission)
-				{
-					if ((empty($arrAllowedArchives) || in_array($objSubmission->pid, $arrAllowedArchives)) &&
-						($blnIncludeEmptyFieldnames || $objSubmission->{$strSubmissionFieldname}))
-						$arrOptions[$objSubmission->id] = $objSubmission->{$strSubmissionFieldname};
-				}
+            $arrOptions = Arrays::array_unique_keys($arrOptions);
+            asort($arrOptions);
+        }
 
-				$arrOptions = Arrays::array_unique_keys($arrOptions);
-				asort($arrOptions);
-			}
-		}
+        return $arrOptions;
+    }
 
-		return $arrOptions;
-	}
+    public static function cleanMembers(\DataContainer $objDc)
+    {
+        $intPid          = \Input::get('id');
+        $blnIntroPrinted = false;
 
-	public static function cleanMembers(\DataContainer $objDc)
-	{
-		$intPid = \Input::get('id');
-		$blnIntroPrinted = false;
+        if ($intPid && ($objArchive = SubmissionArchiveModel::findByPk($intPid)) !== null && $objArchive->memberGroups)
+        {
+            $arrArchiveGroups = deserialize($objArchive->memberGroups, true);
 
-		if ($intPid && ($objArchive = SubmissionArchiveModel::findByPk($intPid)) !== null && $objArchive->memberGroups)
-		{
-			$arrArchiveGroups = deserialize($objArchive->memberGroups, true);
+            if (!empty($arrArchiveGroups))
+            {
+                if (($objMembers = \MemberModel::findAll()) !== null)
+                {
+                    while ($objMembers->next())
+                    {
+                        $arrGroups = deserialize($objMembers->groups, true);
 
-			if (!empty($arrArchiveGroups))
-			{
-				if (($objMembers = \MemberModel::findAll()) !== null)
-				{
-					while ($objMembers->next())
-					{
-						$arrGroups = deserialize($objMembers->groups, true);
+                        if (count(array_intersect($arrGroups, $arrArchiveGroups)) > 0)
+                        {
+                            // check for existing submissions
+                            if (SubmissionModel::findBy('mid', $objMembers->id) === null)
+                            {
+                                if (!$blnIntroPrinted)
+                                {
+                                    echo $GLOBALS['TL_LANG']['tl_competition_submission']['cleanMembersIntro'] . '<br>';
+                                    $blnIntroPrinted = true;
+                                }
 
-						if (count(array_intersect($arrGroups, $arrArchiveGroups)) > 0)
-						{
-							// check for existing submissions
-							if (SubmissionModel::findBy('mid', $objMembers->id) === null)
-							{
-								if (!$blnIntroPrinted)
-								{
-									echo $GLOBALS['TL_LANG']['tl_competition_submission']['cleanMembersIntro'] . '<br>';
-									$blnIntroPrinted = true;
-								}
+                                echo $objMembers->id . '<br>';
+                                $objMembers->groups = serialize(array_diff($arrGroups, $arrArchiveGroups));
+                                $objMembers->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-								echo $objMembers->id . '<br>';
-								$objMembers->groups = serialize(array_diff($arrGroups, $arrArchiveGroups));
-								$objMembers->save();
-							}
-						}
-					}
-				}
-			}
-		}
+        die();
+    }
 
-		die();
-	}
+    public static function checkForDoubleReviewsBe($strRegexp, $varValue, \Widget $objWidget)
+    {
+        if ($strRegexp == 'uniquesid')
+        {
+            if ($varValue)
+            {
+                // digit first
+                if (substr_count($varValue, ',') == 1 && strpos($varValue, '.') === false)
+                {
+                    $varValue = str_replace(',', '.', $varValue);
+                }
 
-	public static function checkForDoubleReviewsBe($strRegexp, $varValue, \Widget $objWidget)
-	{
-		if ($strRegexp == 'uniquesid')
-		{
-			if ($varValue)
-			{
-				// digit first
-				if (substr_count($varValue, ',') == 1 && strpos($varValue, '.') === false)
-				{
-					$varValue = str_replace(',', '.', $varValue);
-				}
+                if (!\Validator::isNumeric($varValue))
+                {
+                    $objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
+                }
 
-				if (!\Validator::isNumeric($varValue))
-				{
-					$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
-				}
+                // then unique sid
+                static::doCheckForDoubleReviews($objWidget, $varValue, \Input::get('table'));
+            }
 
-				// then unique sid
-				static::doCheckForDoubleReviews($objWidget, $varValue, \Input::get('table'));
-			}
+            return true;
+        }
 
-			return true;
-		}
+        return false;
+    }
 
-		return false;
-	}
+    public static function checkForDoubleReviewsFe(\Widget $objWidget, $strTable)
+    {
+        if (!$objWidget->value || $objWidget->name != 'sid')
+        {
+            return;
+        }
 
-	public static function checkForDoubleReviewsFe(\Widget $objWidget, $strTable)
-	{
-		if (!$objWidget->value || $objWidget->name != 'sid')
-			return;
+        // digit first
+        if (substr_count($objWidget->value, ',') == 1 && strpos($objWidget->value, '.') === false)
+        {
+            $objWidget->value = str_replace(',', '.', $objWidget->value);
+        }
 
-		// digit first
-		if (substr_count($objWidget->value, ',') == 1 && strpos($objWidget->value, '.') === false)
-		{
-			$objWidget->value = str_replace(',', '.', $objWidget->value);
-		}
+        if (!\Validator::isNumeric($objWidget->value))
+        {
+            $objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
+        }
 
-		if (!\Validator::isNumeric($objWidget->value))
-		{
-			$objWidget->addError(sprintf($GLOBALS['TL_LANG']['ERR']['digit'], $objWidget->strLabel));
-		}
+        // then unique sid
+        static::doCheckForDoubleReviews($objWidget, $objWidget->value, $strTable);
+    }
 
-		// then unique sid
-		static::doCheckForDoubleReviews($objWidget, $objWidget->value, $strTable);
-	}
+    protected static function doCheckForDoubleReviews(\Widget $objWidget, $varValue, $strTable)
+    {
+        if ($strTable == 'tl_competition_review' && ($objReview = ReviewModel::findByPk(\Input::get('id'))) !== null)
+        {
+            $objReviews = \HeimrichHannot\Competition\ReviewModel::findOneBy(
+                ['sid=?', 'jid=?', 'tl_competition_review.id!=?'],
+                [$varValue, $objReview->jid, \Input::get('id')]
+            );
 
-	protected static function doCheckForDoubleReviews(\Widget $objWidget, $varValue, $strTable)
-	{
-		if ($strTable == 'tl_competition_review' && ($objReview = ReviewModel::findByPk(\Input::get('id'))) !== null)
-		{
-			$objReviews = \HeimrichHannot\Competition\ReviewModel::findOneBy(array('sid=?', 'jid=?', 'tl_competition_review.id!=?'), array($varValue, $objReview->jid, \Input::get('id')));
-
-			// check for already existing reviews by the member for the current submission
-			if ($objReviews !== null)
-			{
-				$objWidget->addError($GLOBALS['TL_LANG']['MSC']['reviewAlreadyExisting']);
-			}
-		}
-	}
+            // check for already existing reviews by the member for the current submission
+            if ($objReviews !== null)
+            {
+                $objWidget->addError($GLOBALS['TL_LANG']['MSC']['reviewAlreadyExisting']);
+            }
+        }
+    }
 
 }
