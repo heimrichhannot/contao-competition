@@ -77,7 +77,7 @@ class Competition
         $blnIncludeEmptyFieldnames = false
     ) {
         $arrOptions            = [];
-        $arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId);
+        $arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId, true);
 
         if (($objReviewArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($intReviewPid)) !== null)
         {
