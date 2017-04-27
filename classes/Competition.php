@@ -73,11 +73,12 @@ class Competition
     public static function getAllowedSubmissionsAsOptions(
         $intReviewPid,
         $intMemberId,
+        $intReview,
         $strSubmissionFieldname = 'id',
         $blnIncludeEmptyFieldnames = false
     ) {
         $arrOptions            = [];
-        $arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId, true);
+        $arrAllowedSubmissions = \HeimrichHannot\Competition\SubmissionModel::getAllowedSubmissions($intMemberId, $intReview, true);
 
         if (($objReviewArchive = \HeimrichHannot\Competition\ReviewArchiveModel::findByPk($intReviewPid)) !== null)
         {

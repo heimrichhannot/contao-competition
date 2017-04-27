@@ -19,23 +19,21 @@ class SubmissionModel extends \Model
 
 	protected static $strTable = 'tl_competition_submission';
 
-	public static function getAllowedSubmissions($intMemberId, $blnRemoveAlreadyReviewed = false)
+	public static function getAllowedSubmissions($intMemberId, $intReview, $blnRemoveAlreadyReviewed = false)
 	{
 		$arrSubmissions = array();
 
-		if ($intMemberId && ($objSubmissions = static::findAll()) !== null)
+		if ($intMemberId && ($objSubmissions = static::findBy(['allowedJids LIKE ?', 'published=?'], ['%"' . $intMemberId . '"%', true])) !== null)
 		{
 			while ($objSubmissions->next())
 			{
-				if ($objSubmissions->published && in_array($intMemberId, deserialize($objSubmissions->allowedJids, true)))
+				$objReview = ReviewModel::findOneBy(array('sid=?', 'jid=?'), array($objSubmissions->id, $intMemberId));
+
+				// check for already existing reviews by the member for the current submission
+				if (!$blnRemoveAlreadyReviewed || ($blnRemoveAlreadyReviewed &&
+						(!$objReview || $intReview == $objReview->id)))
 				{
-					$objReview = ReviewModel::findOneBy(array('sid=?', 'jid=?'), array($objSubmissions->id, $intMemberId));
-					// check for already existing reviews by the member for the current submission
-					if (!$blnRemoveAlreadyReviewed || ($blnRemoveAlreadyReviewed &&
-							(!$objReview || \Input::get('id') == $objReview->id)))
-					{
-						$arrSubmissions[] = $objSubmissions->current();
-					}
+					$arrSubmissions[] = $objSubmissions->current();
 				}
 			}
 		}

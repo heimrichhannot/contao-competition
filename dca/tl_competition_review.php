@@ -170,11 +170,7 @@ class tl_competition_review extends \Backend
 			$strReview .= $objMember->firstname . ' ' . $objMember->lastname;
 		}
 
-		if (($objSubmission = \HeimrichHannot\Competition\SubmissionModel::findByPk($arrRow['sid'])) !== null)
-		{
-			if ($objSubmission->companyTeamName)
-				$strReview .= ' <span style="color:#b3b3b3; padding-left:3px">[' . $objSubmission->companyTeamName . ']</span>';
-		}
+		$strReview .= ' <span style="color:#b3b3b3; padding-left:3px">[' . $arrRow['sid'] . ']</span>';
 
 		$strReview .= '</div>';
 
@@ -387,9 +383,18 @@ class tl_competition_review extends \Backend
 
 	public static function getAllowedSubmissionsAsOptions(\DataContainer $objDc)
 	{
-		$intMemberId = TL_MODE == 'FE' ? \FrontendUser::getInstance()->id : $objDc->activeRecord->jid;
+		if (($objReview = \HeimrichHannot\Competition\ReviewModel::findByPk($objDc->id)) === null)
+		{
+			return [];
+		}
 
-		return \HeimrichHannot\Competition\Competition::getAllowedSubmissionsAsOptions($objDc->activeRecord->pid, $intMemberId);
+		$intMemberId = TL_MODE == 'FE' ? \FrontendUser::getInstance()->id : $objReview->jid;
+
+		return \HeimrichHannot\Competition\Competition::getAllowedSubmissionsAsOptions(
+			$objReview->pid,
+			$intMemberId,
+			$objDc->id
+		);
 	}
 
 }
