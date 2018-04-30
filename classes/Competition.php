@@ -120,7 +120,7 @@ class Competition
                         if (count(array_intersect($arrGroups, $arrArchiveGroups)) > 0)
                         {
                             // check for existing submissions
-                            if (SubmissionModel::findBy('mid', $objMembers->id) === null)
+                            if (SubmissionModel::findBy(['mid=?', 'pid=?', 'published=?'], [$objMembers->id, $intPid, true]) === null)
                             {
                                 if (!$blnIntroPrinted)
                                 {
